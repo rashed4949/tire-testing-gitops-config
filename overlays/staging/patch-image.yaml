@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tire-testing
+spec:
+  template:
+    spec:
+      containers:
+        - name: tire-testing
+          image: 685368365467.dkr.ecr.eu-central-1.amazonaws.com/tire-testing-gitops-snapshot:placeholder
+          env:
+            - name: DB_URL
+              value: "jdbc:postgresql://<gitops-db-private-ip>:5432/tire_testing_gitops_staging"

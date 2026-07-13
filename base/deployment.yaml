@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tire-testing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tire-testing
+  template:
+    metadata:
+      labels:
+        app: tire-testing
+    spec:
+      containers:
+        - name: tire-testing
+          image: 685368365467.dkr.ecr.eu-central-1.amazonaws.com/tire-testing-gitops-release:placeholder
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+          env:
+            - name: DB_USER
+              value: "tire_user"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tire-testing-db-secret
+                  key: password
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: "update"
+            - name: MANAGEMENT_SERVER_PORT
+              value: "8081"
+            - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+              value: "health,info,prometheus,metrics"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: 40
+            periodSeconds: 15
