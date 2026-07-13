@@ -10,4 +10,4 @@ spec:
           image: 685368365467.dkr.ecr.eu-central-1.amazonaws.com/tire-testing-gitops-snapshot:2026.07.13-5
           env:
             - name: DB_URL
-              value: "jdbc:postgresql://<gitops-db-private-ip>:5432/tire_testing_gitops_staging"
+              value: "jdbc:postgresql://10.0.1.242:5432/tire_testing_gitops_staging"
